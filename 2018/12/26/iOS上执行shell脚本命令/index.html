@@ -3,13 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>iOS上执行shell脚本命令 | Hexo</title>
   <meta name="author" content="John Doe">
+  
+  <meta name="description" content="第一种方法：声明一下方法： int system(const char * string);
+然后直接调用,比如重启SpringBoard：system(“killall -9 SpringBoard”)  
+第二种方法：
+#import &amp;lt;spawn.h&amp;gt;extern char **e">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="iOS上执行shell脚本命令"/>
   <meta property="og:site_name" content="Hexo"/>
 
   
@@ -43,8 +48,7 @@
 <div class="clearfix"></div>
 </header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
-  <article class="post">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
   
   <div class="post-content">
     <header>
@@ -54,7 +58,7 @@
       
       
   
-    <h1 class="title"><a href="/2018/12/26/iOS上执行shell脚本命令/">iOS上执行shell脚本命令</a></h1>
+    <h1 class="title">iOS上执行shell脚本命令</h1>
   
 
     </header>
@@ -86,6 +90,24 @@
       
         
         
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
       
       <div class="clearfix"></div>
     </footer>
@@ -93,93 +115,27 @@
 </article>
 
 
+<section id="comment">
+  <h1 class="title">Kommentare</h1>
 
-
-  <article class="post">
   
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2018-12-26T03:27:21.000Z"><a href="/2018/12/26/文件路径/">2018-12-26</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2018/12/26/文件路径/">iOS电话短信记录所在的位置</a></h1>
-  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
 
-    </header>
-    <div class="entry">
-      
-        <p>关于越狱机上的一些文件所在的位置</p>
-<ol>
-<li><p>获取手机的电话号码<br>/private/var/wireless/Library/Preferences/com.apple.commcenter.plist</p>
-</li>
-<li><p>获取本地短信记录<br>/var/mobile/Library/SMS/sms.db</p>
-</li>
-<li><p>获取手机通讯录好友<br>/var/mobile/Library/AddressBook/AddressBook.sqlitedb</p>
-</li>
-<li><p>获取手机通讯录好友头像<br>/var/mobile/Library/AddressBook/AddressBookImages.sqlitedb</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2018-03-21T10:41:30.000Z"><a href="/2018/03/21/文章标题/">2018-03-21</a></time>
-      
+<div class="fb-comments" data-href="http://yoursite.com/2018/12/26/iOS上执行shell脚本命令/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
       
   
-    <h1 class="title"><a href="/2018/03/21/文章标题/">快速创建属于自己的一个Hexo</a></h1>
-  
+</section>
 
-    </header>
-    <div class="entry">
-      
-        <p>前段时间自己摸索了搭建一个Hexo博客，发现还是挺有意思的，记录一波</p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2018/03/21/文章标题/#more" class="more-link">Read More</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-<nav id="pagination">
-  
-  
-  <div class="clearfix"></div>
-</nav></div></div>
+</div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
