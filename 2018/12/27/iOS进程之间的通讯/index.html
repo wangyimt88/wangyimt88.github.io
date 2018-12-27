@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>iOS进程之间的通讯 | Hexo</title>
+  <meta name="author" content="John Doe">
+  
+  <meta name="description" content="iOS中进程之间的通讯方式有很多种，我介绍一下2种最简单、最实用的方式。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="iOS进程之间的通讯"/>
+  <meta property="og:site_name" content="Hexo"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Hexo</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2018-12-27T04:10:30.000Z"><a href="/2018/12/27/iOS进程之间的通讯/">2018-12-27</a></time>
+      
+      
+  
+    <h1 class="title">iOS进程之间的通讯</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>iOS中进程之间的通讯方式有很多种，我介绍一下2种最简单、最实用的方式。</p>
+<a id="more"></a>
+<p>第一种：只通讯，不需要传值</p>
+<p>首先注册通知，一般放在程序启动的方法里面</p>
+<pre><code>CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+                                    NULL,
+                                    &amp;callback,
+                                    CFSTR(&quot;com.relaunchSpringBoard&quot;),
+                                    NULL,
+                                    CFNotificationSuspensionBehaviorCoalesce);
+</code></pre><p>com.relaunchSpringBoard  这个是自己定义的字符串</p>
+<pre><code>static void callback(CFNotificationCenterRef center,void *observer,CFStringRef name,const void     *object, CFDictionaryRef userInfo){
+    NSString *strNotficationName=(__bridge NSString*)name;
+    if ([strNotficationName isEqualToString:@&quot;com.relaunchSpringBoard&quot;]) {
+        NSLog(@&quot;--com.relaunchSpringBoard--&quot;);
+    }
+}
+</code></pre><p>上面这个是回调方法，根据你推送的标识，就可以处理你的其他操作了</p>
+<p>然后就是调用推送方法了，很简单，一句代码搞定：</p>
+<pre><code>#import &lt;notify.h&gt;
+
+notify_post(&quot;com.relaunchSpringBoard&quot;); 
+</code></pre><p>第二种：既通讯又传值<br>首先把这个库和文件下载下来<a href="https://github.com/wangyimt88/rocketbootstrap" target="_blank" rel="noopener">https://github.com/wangyimt88/rocketbootstrap</a>直接拖到工程即可<br>然后注册通知：</p>
+<pre><code>CPDistributedMessagingCenter * messageCenter = ((id (*) (id, SEL, id))objc_msgSend)(objc_getClass(&quot;CPDistributedMessagingCenter&quot;), @selector(centerNamed:), RocketBootstrap_xxx);
+rocketbootstrap_distributedmessagingcenter_apply(messageCenter);
+
+((void(*)(id, SEL))objc_msgSend)(messageCenter, @selector(runServerOnCurrentThread));
+((void(*)(id, SEL, id, id, SEL))objc_msgSend)(messageCenter, @selector(registerForMessageName:target:selector:), @&quot;myMessageName&quot;, self, @selector(handleMessage:withUserInfo:));
+</code></pre><p>RocketBootstrap_xxx 这个是自己定义的宏定义<br>回调函数：</p>
+<pre><code>- (void)handleMessage:(id)arg1 withUserInfo:(id)arg2 {
+    NSLog(@&quot;arg2--%@&quot;, arg2);
+}
+</code></pre><p>返回的值就是上面方法的第二个参数arg2</p>
+<p>接下来就是发送通知的方法了：</p>
+<pre><code>NSDictionary * userInfo = @{@&quot;key1&quot;:value1,
+                            @&quot;key2&quot;:value2};
+CPDistributedMessagingCenter * messageCenter = ((id (*) (id, SEL, id))objc_msgSend)(objc_getClass(&quot;CPDistributedMessagingCenter&quot;), @selector(centerNamed:), RocketBootstrap_xxx);
+rocketbootstrap_distributedmessagingcenter_apply(messageCenter);
+((void(*)(id, SEL, id, id))objc_msgSend)(messageCenter, @selector(sendMessageName:userInfo:), @&quot;myMessageName&quot;, userInfo);
+</code></pre><p>这个通讯传值是非常方便的，但是有一个弊端，他不能在那种有沙盒的第三方应用注册通知，比如AppStore下载的应用，所以一般用在SpringBoard进程里注册通知。<br>所以第二种方法适用于Tweak与应用程序之间的通讯。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Kommentare</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2018/12/27/iOS进程之间的通讯/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2018 John Doe
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
