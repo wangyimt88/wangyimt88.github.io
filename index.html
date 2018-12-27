@@ -100,11 +100,15 @@
     </header>
     <div class="entry">
       
-        <p>第一种方法：<br>声明一下方法：<br> int system(const char * string);</p>
-<p>然后直接调用,比如重启SpringBoard：<br>system(“killall -9 SpringBoard”)  </p>
-<p>第二种方法：</p>
-<p>#import &lt;spawn.h&gt;<br>extern char **environ;</p>
-<pre><code>void run_cmd(const char *cmd)
+        <p>第一种方法：<br>声明一下方法：</p>
+<pre><code>int system(const char * string);
+</code></pre><p>然后直接调用,比如重启SpringBoard：</p>
+<pre><code>system(&quot;killall -9 SpringBoard&quot;)  
+</code></pre><p>第二种方法：</p>
+<pre><code>#import &lt;spawn.h&gt;
+extern char **environ;
+
+void run_cmd(const char *cmd)
 {
     pid_t pid;
     const char *argv[] = {&quot;sh&quot;, &quot;-c&quot;, cmd, NULL};

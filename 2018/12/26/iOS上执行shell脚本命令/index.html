@@ -6,10 +6,13 @@
   <title>iOS上执行shell脚本命令 | Hexo</title>
   <meta name="author" content="John Doe">
   
-  <meta name="description" content="第一种方法：声明一下方法： int system(const char * string);
-然后直接调用,比如重启SpringBoard：system(“killall -9 SpringBoard”)  
+  <meta name="description" content="第一种方法：声明一下方法：
+int system(const char * string);
+然后直接调用,比如重启SpringBoard：
+system(&amp;quot;killall -9 SpringBoard&amp;quot;)  
 第二种方法：
-#import &amp;lt;spawn.h&amp;gt;extern char **e">
+#import &amp;lt;spawn.h&amp;gt;
+ext">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -64,11 +67,15 @@
     </header>
     <div class="entry">
       
-        <p>第一种方法：<br>声明一下方法：<br> int system(const char * string);</p>
-<p>然后直接调用,比如重启SpringBoard：<br>system(“killall -9 SpringBoard”)  </p>
-<p>第二种方法：</p>
-<p>#import &lt;spawn.h&gt;<br>extern char **environ;</p>
-<pre><code>void run_cmd(const char *cmd)
+        <p>第一种方法：<br>声明一下方法：</p>
+<pre><code>int system(const char * string);
+</code></pre><p>然后直接调用,比如重启SpringBoard：</p>
+<pre><code>system(&quot;killall -9 SpringBoard&quot;)  
+</code></pre><p>第二种方法：</p>
+<pre><code>#import &lt;spawn.h&gt;
+extern char **environ;
+
+void run_cmd(const char *cmd)
 {
     pid_t pid;
     const char *argv[] = {&quot;sh&quot;, &quot;-c&quot;, cmd, NULL};
